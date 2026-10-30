@@ -4,11 +4,18 @@
 
   const themes = ['blue', 'green', 'pink', 'purple', 'orange', 'turquoise', 'slate'];
 
-  const link = document.getElementById('themeStylesheet');
+  let link = document.getElementById('themeStylesheet');
   const select = document.getElementById('themeSelect');
   const downloadButton = document.getElementById('downloadTheme');
 
-  if (!link || !select) return;
+  if (!select) return;
+
+  if (!link) {
+    link = document.createElement('link');
+    link.id = 'themeStylesheet';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
 
   const params = new URLSearchParams(location.search);
   const fromUrl = params.get('theme');
@@ -40,7 +47,9 @@
 
     const url = new URL(location.href);
     url.searchParams.set('theme', theme);
-    history.replaceState(null, '', url);
+    try {
+      history.replaceState(null, '', url);
+    } catch {}
   }
 
   applyTheme(initial);
